@@ -104,7 +104,7 @@ const CloseWizard: React.FC = () => {
     denominations.reduce((sum, d) => sum + (parseInt(d.count) || 0) * d.value, 0) * 100
   ) / 100;
 
-  const expectedCash = todayData?.expected_cash || 0;
+  const expectedCash = Number(todayData?.expected_cash || 0);
   const variance = totalCounted - expectedCash;
   const depositAmount = Math.max(0, totalCounted - FLOAT_TARGET);
   const { removeMap, removedTotal, canExact } = computeRemoval(denominations, totalCounted);
@@ -221,8 +221,8 @@ const CloseWizard: React.FC = () => {
           </div>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Opening Float',    value: `$${(todayData?.opening_float || 200).toFixed(2)}`, bg: 'bg-slate-50' },
-              { label: 'Cash Sales Today', value: `$${(todayData?.cash_sales || 0).toFixed(2)}`,      bg: 'bg-slate-50' },
+              { label: 'Opening Float',    value: `$${Number(todayData?.opening_float || 200).toFixed(2)}`, bg: 'bg-slate-50' },
+              { label: 'Cash Sales Today', value: `$${Number(todayData?.cash_sales || 0).toFixed(2)}`,      bg: 'bg-slate-50' },
               { label: 'Expected in Till', value: `$${expectedCash.toFixed(2)}`,                      bg: 'bg-slate-50' },
               { label: 'You Counted',      value: `$${totalCounted.toFixed(2)}`,                      bg: 'bg-indigo-50', color: 'text-indigo-700' },
             ].map(row => (
@@ -251,7 +251,7 @@ const CloseWizard: React.FC = () => {
             </p>
           </div>
           <p className="text-xs text-slate-400 text-center">
-            Transactions: {todayData?.transaction_count || 0} · Debit: ${(todayData?.debit_sales || 0).toFixed(2)} · Credit: ${(todayData?.credit_sales || 0).toFixed(2)}
+            Transactions: {todayData?.transaction_count || 0} · Debit: ${Number(todayData?.debit_sales || 0).toFixed(2)} · Credit: ${Number(todayData?.credit_sales || 0).toFixed(2)}
           </p>
         </div>
       );
@@ -379,7 +379,7 @@ const CloseWizard: React.FC = () => {
               { label: 'Variance',        value: `${variance >= 0 ? '+' : ''}$${variance.toFixed(2)}`, color: variance >= 0 ? 'text-emerald-600' : 'text-red-600' },
               { label: 'Float Kept',      value: `$${FLOAT_TARGET.toFixed(2)}`, color: 'text-slate-500' },
               { label: 'Bank Deposit',    value: `$${depositAmount.toFixed(2)}`, color: 'text-emerald-600' },
-              { label: "Today's Revenue", value: `$${(todayData?.total_sales || 0).toFixed(2)}` },
+              { label: "Today's Revenue", value: `$${Number(todayData?.total_sales || 0).toFixed(2)}` },
               { label: 'Transactions',    value: String(todayData?.transaction_count || 0) },
             ].map(row => (
               <div key={row.label} className="flex items-center justify-between px-4 py-3 border-b border-slate-100 last:border-0">
