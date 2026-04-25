@@ -17,6 +17,7 @@ import OpenRegister from './pages/OpenRegister';
 import Vouchers from './pages/Vouchers';
 import AIListingGenerator from './pages/AIListingGenerator';
 import Reports from './pages/Reports';
+import MonthlySalesReport from './pages/MonthlySalesReport';
 import PinVerification from './pages/PinVerification';
 import Profile from './pages/Profile';
 
@@ -93,6 +94,12 @@ const App: React.FC = () => {
           <Route path="/reports" element={
             <ProtectedRoute roles={['admin', 'manager']}>
               <Layout><Reports /></Layout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/monthly-report" element={
+            <ProtectedRoute roles={['admin']}>
+              <Layout><MonthlySalesReport /></Layout>
             </ProtectedRoute>
           } />
 

@@ -94,6 +94,89 @@ router.post('/eod', authenticate, async (req: AuthRequest, res: Response) => {
   return res.status(201).json(report);
 });
 
+// GET /api/reports/monthly
+router.get('/monthly', authenticate, async (req: AuthRequest, res: Response) => {
+  const year  = parseInt(req.query.year  as string) || new Date().getFullYear();
+  const month = parseInt(req.query.month as string) || new Date().getMonth() + 1;
+
+  const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const endDate   = new Date(year, month, 0).toISOString().split('T')[0]; // last day of month
+
+  // Previous month bounds
+  const prevDate  = new Date(year, month - 2, 1);
+  const prevYear  = prevDate.getFullYear();
+  const prevMonth = prevDate.getMonth() + 1;
+  const prevStart = `${prevYear}-${String(prevMonth).padStart(2, '0')}-01`;
+  const prevEnd   = new Date(prevYear, prevMonth, 0).toISOString().split('T')[0];
+
+  const [summary, prevSummary, daily, topItems, categoryBreakdown, repairStats] = await Promise.all([
+    pool.query(
+      `SELECT
+         COUNT(*)                                                                  AS transaction_count,
+         COALESCE(SUM(total), 0)                                                   AS total_revenue,
+         COALESCE(SUM(CASE WHEN payment_mode = 'Cash'   THEN total ELSE 0 END), 0) AS cash_sales,
+         COALESCE(SUM(CASE WHEN payment_mode = 'Debit'  THEN total ELSE 0 END), 0) AS debit_sales,
+         COALESCE(SUM(CASE WHEN payment_mode = 'Credit' THEN total ELSE 0 END), 0) AS credit_sales,
+         COALESCE(AVG(total), 0)                                                   AS avg_transaction
+       FROM sales WHERE DATE(created_at) BETWEEN $1 AND $2`,
+      [startDate, endDate]
+    ),
+
+    pool.query(
+      `SELECT COALESCE(SUM(total), 0) AS total_revenue, COUNT(*) AS transaction_count
+       FROM sales WHERE DATE(created_at) BETWEEN $1 AND $2`,
+      [prevStart, prevEnd]
+    ),
+
+    pool.query(
+      `SELECT DATE(created_at) AS day,
+              COALESCE(SUM(total), 0)  AS revenue,
+              COUNT(*)                 AS transactions
+       FROM sales WHERE DATE(created_at) BETWEEN $1 AND $2
+       GROUP BY day ORDER BY day ASC`,
+      [startDate, endDate]
+    ),
+
+    pool.query(
+      `SELECT si.name, SUM(si.quantity) AS units_sold, SUM(si.line_total) AS revenue
+       FROM sale_items si JOIN sales s ON si.sale_id = s.id
+       WHERE DATE(s.created_at) BETWEEN $1 AND $2
+       GROUP BY si.name ORDER BY revenue DESC LIMIT 10`,
+      [startDate, endDate]
+    ),
+
+    pool.query(
+      `SELECT category, COUNT(*) AS transactions, COALESCE(SUM(total), 0) AS total
+       FROM sales WHERE DATE(created_at) BETWEEN $1 AND $2
+       GROUP BY category ORDER BY total DESC`,
+      [startDate, endDate]
+    ),
+
+    pool.query(
+      `SELECT COUNT(*) AS total,
+              SUM(CASE WHEN status = 'Complete'    THEN 1 ELSE 0 END) AS completed,
+              SUM(CASE WHEN status = 'Collected'   THEN 1 ELSE 0 END) AS collected,
+              SUM(CASE WHEN status = 'In Progress' THEN 1 ELSE 0 END) AS in_progress,
+              SUM(CASE WHEN status = 'Received'    THEN 1 ELSE 0 END) AS received
+       FROM repairs WHERE DATE(created_at) BETWEEN $1 AND $2`,
+      [startDate, endDate]
+    ),
+  ]);
+
+  return res.json({
+    year,
+    month,
+    start_date: startDate,
+    end_date: endDate,
+    summary: summary.rows[0],
+    prev_summary: prevSummary.rows[0],
+    daily: daily.rows,
+    top_items: topItems.rows,
+    category_breakdown: categoryBreakdown.rows,
+    repairs: repairStats.rows[0],
+  });
+});
+
 // GET /api/reports/sales-by-category
 router.get('/sales-by-category', authenticate, async (req: AuthRequest, res: Response) => {
   const { start_date, end_date } = req.query;

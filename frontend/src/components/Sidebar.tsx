@@ -14,6 +14,7 @@ import {
   WandSparkles,
   BotMessageSquare,
   BarChart3,
+  CalendarDays,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -41,6 +42,7 @@ const navItems: NavItem[] = [
   { to: '/close-wizard', label: 'Close Day', icon: WandSparkles, roles: ['admin', 'manager', 'employee'], section: 'till' },
   { to: '/ai-listing', label: 'AI Tools', icon: BotMessageSquare, roles: ['admin', 'manager'], section: 'tools' },
   { to: '/reports', label: 'EOD Reports', icon: BarChart3, roles: ['admin', 'manager'], section: 'tools' },
+  { to: '/monthly-report', label: 'Monthly Report', icon: CalendarDays, roles: ['admin'], section: 'tools' },
 ];
 
 const sectionLabels: Record<string, string> = {

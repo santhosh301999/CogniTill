@@ -17,6 +17,7 @@ const pageTitles: Record<string, string> = {
   '/close-wizard': 'Close Day Wizard',
   '/ai-listing': 'AI Tools',
   '/reports': 'EOD Reports',
+  '/monthly-report': 'Monthly Sales Report',
   '/profile': 'My Profile',
 };
 

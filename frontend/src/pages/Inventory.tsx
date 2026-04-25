@@ -36,6 +36,7 @@ const Inventory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkUpdates, setBulkUpdates] = useState<BulkUpdate[]>([]);
   const [saving, setSaving] = useState(false);
@@ -215,6 +216,11 @@ const Inventory: React.FC = () => {
           <option value="">All Categories</option>
           {categories.map(c => <option key={c}>{c}</option>)}
         </select>
+        <select className="input w-auto min-w-[140px]" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+          <option value="">All Status</option>
+          <option value="in_stock">In Stock</option>
+          <option value="low_stock">Low Stock</option>
+        </select>
       </div>
 
       {/* Bulk mode banner */}
@@ -260,7 +266,11 @@ const Inventory: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {items.map(item => {
+                {items.filter(item => {
+                  if (statusFilter === 'low_stock') return item.quantity <= item.low_stock_threshold;
+                  if (statusFilter === 'in_stock') return item.quantity > item.low_stock_threshold;
+                  return true;
+                }).map(item => {
                   const isLow = item.quantity <= item.low_stock_threshold;
                   const bu = bulkUpdates.find(u => u.id === item.id);
 
