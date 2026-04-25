@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://cognitill-production.up.railway.app/api',
   timeout: 30000,
 });
 
