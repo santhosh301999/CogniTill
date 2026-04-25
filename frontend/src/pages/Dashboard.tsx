@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Today's Revenue"
-          value={`$${(sales?.total_revenue || 0).toFixed(2)}`}
+          value={`$${Number(sales?.total_revenue || 0).toFixed(2)}`}
           icon={TrendingUp}
           gradient="bg-gradient-to-br from-emerald-50 to-teal-50/50"
           iconBg="bg-emerald-500"
@@ -189,12 +189,12 @@ const Dashboard: React.FC = () => {
         />
         <StatCard
           title="Cash Sales"
-          value={`$${(sales?.cash_total || 0).toFixed(2)}`}
+          value={`$${Number(sales?.cash_total || 0).toFixed(2)}`}
           icon={Banknote}
           gradient="bg-gradient-to-br from-violet-50 to-purple-50/50"
           iconBg="bg-violet-500"
           iconColor="text-white"
-          subtitle={`Debit: $${(sales?.debit_total || 0).toFixed(2)}`}
+          subtitle={`Debit: $${Number(sales?.debit_total || 0).toFixed(2)}`}
         />
       </div>
 
@@ -246,7 +246,7 @@ const Dashboard: React.FC = () => {
               ].map(p => (
                 <div key={p.label} className="bg-slate-50 rounded-xl p-3 text-center">
                   <p.icon size={14} className={`${p.color} mx-auto mb-1.5`} />
-                  <p className="text-sm font-bold text-slate-800">${p.value.toFixed(2)}</p>
+                  <p className="text-sm font-bold text-slate-800">${Number(p.value).toFixed(2)}</p>
                   <p className="text-xs text-slate-400">{p.label}</p>
                 </div>
               ))}
@@ -307,11 +307,11 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="space-y-1">
                 {[
-                  { label: 'Total Revenue',       value: `$${(eodReport?.sales?.total_revenue || 0).toFixed(2)}`,  highlight: false },
+                  { label: 'Total Revenue',       value: `$${Number(eodReport?.sales?.total_revenue || 0).toFixed(2)}`,  highlight: false },
                   { label: 'Transactions',         value: eodReport?.sales?.transaction_count || 0,                 highlight: false },
                   { label: 'Repairs Logged',       value: eodReport?.repairs?.total_repairs || 0,                   highlight: false },
                   { label: 'Repairs Completed',    value: eodReport?.repairs?.completed || 0,                       highlight: true  },
-                  { label: 'SIM Sales',            value: `$${(eodReport?.sales?.sim_revenue || 0).toFixed(2)}`,    highlight: false },
+                  { label: 'SIM Sales',            value: `$${Number(eodReport?.sales?.sim_revenue || 0).toFixed(2)}`,    highlight: false },
                 ].map(row => (
                   <div key={row.label} className="flex items-center justify-between py-2.5 border-b border-slate-50 last:border-0">
                     <span className="text-sm text-slate-500">{row.label}</span>

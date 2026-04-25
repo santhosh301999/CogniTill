@@ -284,8 +284,8 @@ const Inventory: React.FC = () => {
                           <span className="text-xs text-slate-400">/ {item.low_stock_threshold} min</span>
                         </div>
                       </td>
-                      <td className="table-td text-slate-500">${item.cost_price.toFixed(2)}</td>
-                      <td className="table-td font-semibold text-slate-800">${item.sell_price.toFixed(2)}</td>
+                      <td className="table-td text-slate-500">${Number(item.cost_price).toFixed(2)}</td>
+                      <td className="table-td font-semibold text-slate-800">${Number(item.sell_price).toFixed(2)}</td>
 
                       {bulkMode && bu && (
                         <>
@@ -302,7 +302,7 @@ const Inventory: React.FC = () => {
                               type="number" min="0" step="0.01" value={bu.cost_price}
                               onChange={e => updateBulkField(item.id, 'cost_price', e.target.value ? parseFloat(e.target.value) : '')}
                               className="input py-1.5 w-24"
-                              placeholder={item.cost_price.toFixed(2)}
+                              placeholder={Number(item.cost_price).toFixed(2)}
                             />
                           </td>
                           <td className="table-td">
@@ -310,7 +310,7 @@ const Inventory: React.FC = () => {
                               type="number" min="0" step="0.01" value={bu.sell_price}
                               onChange={e => updateBulkField(item.id, 'sell_price', e.target.value ? parseFloat(e.target.value) : '')}
                               className="input py-1.5 w-24"
-                              placeholder={item.sell_price.toFixed(2)}
+                              placeholder={Number(item.sell_price).toFixed(2)}
                             />
                           </td>
                         </>

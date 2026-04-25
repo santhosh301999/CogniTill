@@ -73,8 +73,8 @@ const Vouchers: React.FC = () => {
     } catch (err) { console.error(err); }
   };
 
-  const totalRevenue = vouchers.reduce((s, v) => s + v.sold_at, 0);
-  const totalProfit = vouchers.reduce((s, v) => s + (v.sold_at - v.cost_price), 0);
+  const totalRevenue = vouchers.reduce((s, v) => s + Number(v.sold_at), 0);
+  const totalProfit = vouchers.reduce((s, v) => s + (Number(v.sold_at) - Number(v.cost_price)), 0);
 
   return (
     <div className="space-y-5">
@@ -204,8 +204,8 @@ const Vouchers: React.FC = () => {
                   <tr key={v.id} className="table-row">
                     <td className="table-td font-semibold text-slate-800">{v.carrier}</td>
                     <td className="table-td text-slate-500">${v.amount}</td>
-                    <td className="table-td font-semibold text-slate-800">${v.sold_at.toFixed(2)}</td>
-                    <td className="table-td font-semibold text-emerald-600">${(v.sold_at - v.cost_price).toFixed(2)}</td>
+                    <td className="table-td font-semibold text-slate-800">${Number(v.sold_at).toFixed(2)}</td>
+                    <td className="table-td font-semibold text-emerald-600">${(Number(v.sold_at) - Number(v.cost_price)).toFixed(2)}</td>
                     <td className="table-td text-slate-500">{v.customer_phone}</td>
                     <td className="table-td">
                       <span className={statusBadge[v.status] || 'badge-gray'}>{v.status}</span>

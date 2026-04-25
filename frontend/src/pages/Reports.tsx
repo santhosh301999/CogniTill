@@ -111,7 +111,7 @@ const Reports: React.FC = () => {
               </div>
               <div className="text-right">
                 <p className="text-indigo-300 text-xs uppercase tracking-wide mb-1">Total Revenue</p>
-                <p className="text-3xl font-bold">${(report.sales?.total_revenue || 0).toFixed(2)}</p>
+                <p className="text-3xl font-bold">${Number(report.sales?.total_revenue || 0).toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -135,13 +135,13 @@ const Reports: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Sales Breakdown */}
             <SectionCard title="Sales Breakdown" icon="💰">
-              <StatRow label="Total Revenue" value={`$${(report.sales?.total_revenue || 0).toFixed(2)}`} highlight />
-              <StatRow label="Cash Sales" value={`$${(report.sales?.cash_sales || 0).toFixed(2)}`} />
-              <StatRow label="Debit Sales" value={`$${(report.sales?.debit_sales || 0).toFixed(2)}`} />
-              <StatRow label="Credit Sales" value={`$${(report.sales?.credit_sales || 0).toFixed(2)}`} />
-              <StatRow label="SIM Revenue" value={`$${(report.sales?.sim_revenue || 0).toFixed(2)}`} />
-              <StatRow label="Accessory Revenue" value={`$${(report.sales?.accessory_revenue || 0).toFixed(2)}`} />
-              <StatRow label="Voucher Revenue" value={`$${(report.vouchers?.revenue || 0).toFixed(2)}`} />
+              <StatRow label="Total Revenue" value={`$${Number(report.sales?.total_revenue || 0).toFixed(2)}`} highlight />
+              <StatRow label="Cash Sales" value={`$${Number(report.sales?.cash_sales || 0).toFixed(2)}`} />
+              <StatRow label="Debit Sales" value={`$${Number(report.sales?.debit_sales || 0).toFixed(2)}`} />
+              <StatRow label="Credit Sales" value={`$${Number(report.sales?.credit_sales || 0).toFixed(2)}`} />
+              <StatRow label="SIM Revenue" value={`$${Number(report.sales?.sim_revenue || 0).toFixed(2)}`} />
+              <StatRow label="Accessory Revenue" value={`$${Number(report.sales?.accessory_revenue || 0).toFixed(2)}`} />
+              <StatRow label="Voucher Revenue" value={`$${Number(report.vouchers?.revenue || 0).toFixed(2)}`} />
             </SectionCard>
 
             {/* Repair Summary */}

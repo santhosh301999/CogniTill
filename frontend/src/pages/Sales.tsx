@@ -242,7 +242,7 @@ const Sales: React.FC = () => {
                   <p className="text-sm font-semibold text-slate-800 truncate group-hover:text-indigo-700">{item.name}</p>
                   <p className="text-[11px] text-slate-400 mb-2">{item.category}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold text-indigo-600">${item.sell_price.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-indigo-600">${Number(item.sell_price).toFixed(2)}</span>
                     <span className={`text-[11px] font-medium ${item.quantity <= 3 ? 'text-red-500' : 'text-slate-400'}`}>
                       {item.quantity} left
                     </span>
