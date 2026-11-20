@@ -11,12 +11,13 @@ export interface AuthRequest extends Request {
 }
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  // Catalyst's gateway claims the Authorization header for Zoho OAuth,
+  // so the app JWT travels in a custom header instead.
+  const token = req.headers['x-cognitill-token'];
+  if (typeof token !== 'string' || !token) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'cognitill-secret-key-2024') as any;
     req.user = decoded;

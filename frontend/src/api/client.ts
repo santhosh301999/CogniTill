@@ -9,7 +9,8 @@ const client = axios.create({
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem('cognitill_token');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    // Not Authorization: Catalyst's gateway treats that header as a Zoho OAuth token
+    config.headers['X-CogniTill-Token'] = token;
   }
   return config;
 });
