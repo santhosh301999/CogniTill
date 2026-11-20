@@ -17,21 +17,18 @@ import reportsRoutes from './routes/reports';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// True when started directly (npm run dev / node dist/index.js); false when
+// Catalyst's Advanced I/O runtime require()s the app.
+const isLocal = require.main === module;
+
 // Middleware
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://127.0.0.1:5173',
-  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-];
-
-// Catalyst Slate / project domains are allowed in addition to the explicit list
-const catalystOrigin = /^https:\/\/[a-z0-9-]+(\.development)?\.(onslate\.com|catalystserverless\.com|onslate\.in|catalystserverless\.in)$/;
-
-app.use(cors({
-  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin) || catalystOrigin.test(origin)),
-  credentials: true,
-}));
+// Catalyst handles CORS in production; only add it for local dev
+if (isLocal) {
+  app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173'],
+    credentials: true,
+  }));
+}
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -69,7 +66,7 @@ app.use((err: any, _req: any, res: any, _next: any) => {
 
 // Local dev: start a server. On Catalyst Advanced I/O the function runtime
 // imports the app and serves it, so we must not call listen().
-if (require.main === module) {
+if (isLocal) {
   app.listen(PORT, () => {
     console.log(`CogniTill Backend running on http://localhost:${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
