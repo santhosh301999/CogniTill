@@ -5,7 +5,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "ts-node src/seed.ts"
+    "seed": "ts-node src/seed.ts",
+    "build:catalyst": "tsc --outDir ../functions/cognitill_api/dist && cd ../functions/cognitill_api && npm install --omit=dev"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

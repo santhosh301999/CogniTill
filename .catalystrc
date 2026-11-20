@@ -1,0 +1,14 @@
+{
+  "projects": [
+    {
+      "id": "13137000003231001",
+      "name": "CogniTill",
+      "domain": { "id": "10124707603", "name": "cognitill-799162873.development" },
+      "env_id": "13137000003231036",
+      "env_type": 3,
+      "timezone": "Asia/Kolkata",
+      "org": "799162873",
+      "default": true
+    }
+  ]
+}

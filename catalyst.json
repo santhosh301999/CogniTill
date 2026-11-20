@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "targets": ["cognitill_api"],
+    "ignore": [],
+    "source": "functions"
+  }
+}

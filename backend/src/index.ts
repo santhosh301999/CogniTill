@@ -25,8 +25,11 @@ const allowedOrigins = [
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
 ];
 
+// Catalyst Slate / project domains are allowed in addition to the explicit list
+const catalystOrigin = /^https:\/\/[a-z0-9-]+(\.development)?\.(onslate\.com|catalystserverless\.com|onslate\.in|catalystserverless\.in)$/;
+
 app.use(cors({
-  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin)),
+  origin: (origin, cb) => cb(null, !origin || allowedOrigins.includes(origin) || catalystOrigin.test(origin)),
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -64,9 +67,13 @@ app.use((err: any, _req: any, res: any, _next: any) => {
   res.status(500).json({ error: 'Internal server error', details: err.message });
 });
 
-app.listen(PORT, () => {
-  console.log(`CogniTill Backend running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// Local dev: start a server. On Catalyst Advanced I/O the function runtime
+// imports the app and serves it, so we must not call listen().
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`CogniTill Backend running on http://localhost:${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
 
 export default app;
